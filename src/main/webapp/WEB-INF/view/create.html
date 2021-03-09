@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+<form th:action="@{'/blog/'+${blog.id==0?'/create':'/update'}}" method="post" th:object="${blog}">
+    <input type="hidden" th:value="*{id}" name="id">
+    <label>Title:
+        <input type="text" th:value="*{title}" name="title">
+    </label>
+    <label for="content">Content: </label><textarea name="content" id="content" cols="30" rows="10" th:placeholder="*{content}"></textarea>
+    <label>Date:
+        <input type="date" name="date" th:value="*{date}">
+    </label>
+    <input type="submit" th:value="${blog.id==0?'Create':'update'}">
+</form>
+</body>
+</html>
