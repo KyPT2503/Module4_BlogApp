@@ -16,11 +16,17 @@
     <input type="hidden" th:value="*{id}" name="id">
     <label>Title:
         <input type="text" th:value="*{title}" name="title">
-    </label>
-    <label for="content">Content: </label><textarea name="content" id="content" cols="30" rows="10" th:placeholder="*{content}"></textarea>
+    </label><br>
+    <label for="content">Content: </label><textarea name="content" id="content" cols="30" rows="10"
+                                                    th:placeholder="*{content}"></textarea><br>
     <label>Date:
         <input type="date" name="date" th:value="*{date}">
-    </label>
+    </label><br>
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+        <option th:selected="${blog.category!=null and blog.category.id==category.id}" th:value="${category.name}"
+                th:each="category:${categories}" th:text="${category.name}"></option>
+    </select><br>
     <input type="submit" th:value="${blog.id==0?'Create':'update'}">
 </form>
 </body>

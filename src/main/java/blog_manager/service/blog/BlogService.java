@@ -1,44 +1,58 @@
 package blog_manager.service.blog;
 
 import blog_manager.model.Blog;
+import blog_manager.model.Category;
+import blog_manager.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class BlogService implements IBlogService {
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private BlogRepository blogRepository;
 
     @Override
     public List<Blog> findAll() {
-        return entityManager.createQuery("select b from Blog as b").getResultList();
+        return (List<Blog>) blogRepository.findAll();
     }
 
     @Override
     public Blog findById(int id) {
-        return entityManager.find(Blog.class, id);
+        return blogRepository.findOne(id);
     }
 
     @Override
     public boolean remove(int id) {
-        entityManager.remove(entityManager.find(Blog.class, id));
+        blogRepository.delete(id);
         return true;
     }
 
     @Override
     public Blog update(int id, Blog blog) {
-        entityManager.merge(blog);
-        return blog;
+        return blogRepository.save(blog);
     }
 
     @Override
     public Blog add(Blog blog) {
-        entityManager.persist(blog);
-        return blog;
+        return blogRepository.save(blog);
+    }
+
+    @Override
+    public Page<Blog> findAllForManyPage(Pageable pageable) {
+        return blogRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Blog> findByName(String name, Pageable pageable) {
+        return (Page<Blog>) blogRepository.findAllByTitleContaining(name, pageable);
+    }
+
+    @Override
+    public Page<Blog> findByCategory(Category category, Pageable pageable) {
+        return blogRepository.findAllByCategoryId(category.getId(), pageable);
     }
 }

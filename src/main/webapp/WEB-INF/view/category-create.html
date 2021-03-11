@@ -12,27 +12,12 @@
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
-<form>
-    <input type="text" name="name">
-    <input type="submit" value="Search">
+<form action="/category/create" method="post" th:object="${category}">
+    <input type="hidden" name="id" th:value="*{id}">
+    <label>Name:
+        <input type="text" name="name" th:value="*{name}">
+    </label><br>
+    <input type="submit" value="Save">
 </form>
-<br>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>TITLE</th>
-        <th>DATE</th>
-        <th>CATEGORY</th>
-    </tr>
-    <tr th:each="blog:${blogs}">
-        <td th:text="${blog.id}"></td>
-        <td th:text="${blog.title}"></td>
-        <td th:text="${blog.date}"></td>
-        <td th:text="${blog.category.name}"></td>
-    </tr>
-</table>
-<a th:href="@{'/blog/all'(page=${blogs.number}-1)}" th:if="${blogs.hasPrevious()}" th:text="Previous"></a>
-<span th:text="${blogs.number+1}"></span>
-<a th:href="@{'/blog/all'(page=${blogs.number}+1)}" th:if="${blogs.hasNext()}" th:text="Next"></a>
 </body>
 </html>

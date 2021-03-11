@@ -12,6 +12,8 @@ public class Blog {
     private String title;
     private String content;
     private Date date;
+    @ManyToOne
+    private Category category;
 
     public Blog() {
     }
@@ -59,5 +61,13 @@ public class Blog {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
