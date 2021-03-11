@@ -1,15 +1,13 @@
 package blog_manager.config;
 
+import blog_manager.concern.Logger;
 import blog_manager.formatter.CategoryFormatter;
 import blog_manager.service.category.CategoryService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -43,6 +41,7 @@ import java.util.Properties;
 @ComponentScan("blog_manager")
 @EnableSpringDataWebSupport
 @EnableJpaRepositories("blog_manager.repository")
+@EnableAspectJAutoProxy
 public class AppConfiguration extends WebMvcConfigurerAdapter implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
@@ -138,5 +137,9 @@ public class AppConfiguration extends WebMvcConfigurerAdapter implements Applica
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new CategoryFormatter(applicationContext.getBean(CategoryService.class)));
+    }
+    @Bean
+    public Logger logger(){
+        return new Logger();
     }
 }

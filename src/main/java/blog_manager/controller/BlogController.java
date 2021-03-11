@@ -58,8 +58,8 @@ public class BlogController {
     }
 
     @GetMapping("/detail/{id}")
-    public ModelAndView showDetailPage(@PathVariable("id") Blog blog) {
-        return new ModelAndView("detail", "blog", blog);
+    public ModelAndView showDetailPage(@PathVariable("id") int id) {
+        return new ModelAndView("detail", "blog", blogService.findById(id));
     }
 
     @GetMapping("/update/{id}")
