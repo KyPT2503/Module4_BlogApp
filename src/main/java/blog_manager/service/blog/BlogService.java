@@ -21,7 +21,8 @@ public class BlogService implements IBlogService {
     }
 
     @Override
-    public Blog findById(int id) {
+    public Blog findById(int id) throws Exception {
+        if (!blogRepository.exists(id)) throw new Exception();
         return blogRepository.findOne(id);
     }
 

@@ -7,9 +7,7 @@ import blog_manager.service.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +29,7 @@ public class BlogController {
     }
 
     @GetMapping("/all")
-    public ModelAndView showAll(@PageableDefault(size = 2) Pageable pageable, @RequestParam("name") Optional<String> name) {
+    public ModelAndView showAll(@PageableDefault(size = 10) Pageable pageable, @RequestParam("name") Optional<String> name) {
         Page<Blog> blogs;
         if (name.isPresent()) {
             blogs = blogService.findByName(name.get(), pageable);
@@ -43,7 +41,11 @@ public class BlogController {
 
     @GetMapping("/category-search/{id}")
     public ModelAndView categorySearch(@PathVariable("id") int categoryId, @PageableDefault(size = 2) Pageable pageable) {
-        return new ModelAndView("index", "blogs", blogService.findByCategory(categoryService.findById(categoryId), pageable));
+        try {
+            return new ModelAndView("index", "blogs", blogService.findByCategory(categoryService.findById(categoryId), pageable));
+        } catch (Exception e) {
+            return new ModelAndView("error-404");
+        }
     }
 
     @GetMapping("/create")
@@ -59,12 +61,20 @@ public class BlogController {
 
     @GetMapping("/detail/{id}")
     public ModelAndView showDetailPage(@PathVariable("id") int id) {
-        return new ModelAndView("detail", "blog", blogService.findById(id));
+        try {
+            return new ModelAndView("detail", "blog", blogService.findById(id));
+        } catch (Exception e) {
+            return new ModelAndView("error-404");
+        }
     }
 
     @GetMapping("/update/{id}")
     public ModelAndView showUpdatePage(@PathVariable("id") int id) {
-        return new ModelAndView("create", "blog", blogService.findById(id));
+        try {
+            return new ModelAndView("create", "blog", blogService.findById(id));
+        } catch (Exception e) {
+            return new ModelAndView("error-404");
+        }
     }
 
     @PostMapping("/update")
@@ -75,7 +85,11 @@ public class BlogController {
 
     @GetMapping("/remove/{id}")
     public ModelAndView showRemovePage(@PathVariable("id") int id) {
-        return new ModelAndView("detail", "blog", blogService.findById(id));
+        try {
+            return new ModelAndView("detail", "blog", blogService.findById(id));
+        } catch (Exception e) {
+            return new ModelAndView("error-404");
+        }
     }
 
     @PostMapping("/remove")

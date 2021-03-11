@@ -9,6 +9,7 @@ public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column(unique = true,name = "title")
     private String title;
     private String content;
     private Date date;
