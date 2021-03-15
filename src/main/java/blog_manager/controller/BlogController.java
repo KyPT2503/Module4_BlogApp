@@ -5,17 +5,18 @@ import blog_manager.model.Category;
 import blog_manager.service.blog.IBlogService;
 import blog_manager.service.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/blog")
 public class BlogController {
     @Autowired
@@ -29,72 +30,38 @@ public class BlogController {
     }
 
     @GetMapping("/all")
-    public ModelAndView showAll(@PageableDefault(size = 10) Pageable pageable, @RequestParam("name") Optional<String> name) {
-        Page<Blog> blogs;
-        if (name.isPresent()) {
-            blogs = blogService.findByName(name.get(), pageable);
-        } else {
-            blogs = blogService.findAllForManyPage(pageable);
-        }
-        return new ModelAndView("index", "blogs", blogs);
+    public ResponseEntity<List<Blog>> getAll() {
+        return new ResponseEntity<>(blogService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/category-search/{id}")
-    public ModelAndView categorySearch(@PathVariable("id") int categoryId, @PageableDefault(size = 2) Pageable pageable) {
-        try {
-            return new ModelAndView("index", "blogs", blogService.findByCategory(categoryService.findById(categoryId), pageable));
-        } catch (Exception e) {
-            return new ModelAndView("error-404");
-        }
-    }
-
-    @GetMapping("/create")
-    public ModelAndView showCreatePage() {
-        return new ModelAndView("create", "blog", new Blog());
+    public ResponseEntity<List<Blog>> getByCategory(@PathVariable("id") Category category) {
+        return new ResponseEntity<>(blogService.findByCategory(category), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ModelAndView createBlog(@ModelAttribute("blog") Blog blog) {
+    public ResponseEntity<Blog> create(@RequestBody Blog blog, UriComponentsBuilder uriComponentsBuilder) {
         blogService.add(blog);
-        return new ModelAndView("redirect:/blog/all");
+        HttpHeaders header = new HttpHeaders();
+        header.setLocation(uriComponentsBuilder.path("/blog/detail/{id}").buildAndExpand(blog.getId()).toUri());
+        return new ResponseEntity<>(header, HttpStatus.CREATED);
     }
 
     @GetMapping("/detail/{id}")
-    public ModelAndView showDetailPage(@PathVariable("id") int id) {
-        try {
-            return new ModelAndView("detail", "blog", blogService.findById(id));
-        } catch (Exception e) {
-            return new ModelAndView("error-404");
-        }
+    public ResponseEntity<Blog> getSingleBlog(@PathVariable("id") Blog blog) {
+        return new ResponseEntity<>(blog, HttpStatus.OK);
     }
 
-    @GetMapping("/update/{id}")
-    public ModelAndView showUpdatePage(@PathVariable("id") int id) {
-        try {
-            return new ModelAndView("create", "blog", blogService.findById(id));
-        } catch (Exception e) {
-            return new ModelAndView("error-404");
-        }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Blog> updateUser(@PathVariable("id") int id, @RequestBody Blog blog) {
+        blog.setId(id);
+        blogService.update(id, blog);
+        return new ResponseEntity<>(blog, HttpStatus.OK);
     }
 
-    @PostMapping("/update")
-    public ModelAndView update(@ModelAttribute("blog") Blog blog) {
-        blogService.update(blog.getId(), blog);
-        return new ModelAndView("redirect:/blog/all");
-    }
-
-    @GetMapping("/remove/{id}")
-    public ModelAndView showRemovePage(@PathVariable("id") int id) {
-        try {
-            return new ModelAndView("detail", "blog", blogService.findById(id));
-        } catch (Exception e) {
-            return new ModelAndView("error-404");
-        }
-    }
-
-    @PostMapping("/remove")
-    public ModelAndView remove(@ModelAttribute("blog") Blog blog) {
-        blogService.remove(blog.getId());
-        return new ModelAndView("redirect:/blog/all");
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Void> remove(@PathVariable("id") int id) {
+        blogService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -8,9 +8,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BlogRepository extends PagingAndSortingRepository<Blog, Integer> {
-    Page<Blog> findAllByTitleContaining(String title, Pageable pageable);
+    List<Blog> findAllByTitleContaining(String title);
 
-    Page<Blog> findAllByCategoryId(int categoryId,Pageable pageable);
+    List<Blog> findAllByCategoryId(int categoryId);
 }

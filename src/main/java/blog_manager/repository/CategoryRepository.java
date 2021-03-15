@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
-    Category findFirstByName(String name);
+    Category findFirstByNameContaining(String name);
 }

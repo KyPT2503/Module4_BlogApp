@@ -26,12 +26,14 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public boolean remove(int id) {
-        return false;
+        categoryRepository.delete(id);
+        return true;
     }
 
     @Override
     public Category update(int id, Category category) {
-        return null;
+        category.setId(id);
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -41,6 +43,6 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category findByName(String name) {
-        return categoryRepository.findFirstByName(name);
+        return categoryRepository.findFirstByNameContaining(name);
     }
 }

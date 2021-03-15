@@ -5,11 +5,10 @@ import org.aspectj.lang.annotation.*;
 
 @Aspect
 public class Logger {
-    @AfterReturning(pointcut = "execution(public * blog_manager.service.blog.BlogService.findById(..))", returning = "blog")
-    public void log(Blog blog) {
+    @AfterReturning(pointcut = "execution(public * blog_manager.service.blog.BlogService.findById(..))")
+    public void log() {
         System.out.println("[Logger] ...");
         System.out.println("Find by id: " + "...");
-        System.out.println("Result: " + blog.getTitle());
     }
     /*
     *@After(value = "execution(public * blog_manager.service.blog.BlogService.add(blog))", argNames = "blog")

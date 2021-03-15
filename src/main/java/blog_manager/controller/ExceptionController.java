@@ -9,7 +9,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class ExceptionController {
-    @ExceptionHandler(RuntimeException.class)
+    /*@ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView showErrPage() {
         return new ModelAndView("error-404");
@@ -17,5 +17,5 @@ public class ExceptionController {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView showErrorPage() {
         return new ModelAndView("error-404");
-    }
+    }*/
 }

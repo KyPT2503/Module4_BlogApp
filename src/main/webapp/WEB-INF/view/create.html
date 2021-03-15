@@ -24,7 +24,7 @@
     </label><br>
     <label for="category">Category:</label>
     <select name="category" id="category">
-        <option th:selected="${blog.category!=null and blog.category.id==category.id}" th:value="${category.name}"
+        <option th:selected="${blog.category!=null and blog.category.id==category.id}" th:value="${category.id}"
                 th:each="category:${categories}" th:text="${category.name}"></option>
     </select><br>
     <input type="submit" th:value="${blog.id==0?'Create':'update'}">

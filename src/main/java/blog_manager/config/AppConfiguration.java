@@ -1,7 +1,6 @@
 package blog_manager.config;
 
 import blog_manager.concern.Logger;
-import blog_manager.formatter.CategoryFormatter;
 import blog_manager.service.category.CategoryService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,11 +130,6 @@ public class AppConfiguration extends WebMvcConfigurerAdapter implements Applica
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
         return transactionManager;
-    }
-
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new CategoryFormatter(applicationContext.getBean(CategoryService.class)));
     }
     @Bean
     public Logger logger(){

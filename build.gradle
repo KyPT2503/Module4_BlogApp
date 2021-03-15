@@ -38,6 +38,9 @@ dependencies {
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
     compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
     compile group: 'org.springframework', name: 'spring-aop', version: '4.3.17.RELEASE'
+
+    //RESTful
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.3'
 }
 
 test {
